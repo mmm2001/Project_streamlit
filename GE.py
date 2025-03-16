@@ -1,5 +1,8 @@
 import streamlit as st
 from datetime import datetime
+import pandas as pd
+import numpy as np
+import plotly.express as px
 
 st.title("Элементы ввода Streamlit")
 st.markdown("---")
@@ -254,4 +257,181 @@ with col2:
         key="time_input1"
     )
     st.write(f"Выбрано: {date} {time}")
+    st.markdown("---")
+
+#
+# ЭЛЕМЕНТЫ ВЫВОДА
+# 
+
+
+st.title("Элементы вывода Streamlit")
+st.markdown("---")
+
+# Генерация тестовых данных
+data = pd.DataFrame({
+    'Город': ['Москва', 'Санкт-Петербург', 'Казань', 'Екатеринбург'],
+    'Население (млн)': [12.6, 5.4, 1.3, 1.5],
+    'Рейтинг': [4.7, 4.5, 4.3, 4.2]
+})
+
+# Текстовые элементы
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("1. Текст")
+    st.code('''
+# Простой текст
+st.text("Обычный текст без форматирования")
+
+# Markdown
+st.markdown("**Жирный текст** и *курсив*")
+
+# LaTeX
+st.latex(r"\sum_{i=1}^n x_i^2")
+
+# Код
+st.code("print('Hello World!')", language='python')
+
+# Заголовки
+st.title("Главный заголовок")
+st.header("Заголовок раздела")
+st.subheader("Подзаголовок")
+''', language='python')
+
+with col2:
+    st.subheader("Пример")
+    st.text("Обычный текст без форматирования")
+    st.markdown("**Жирный текст** и *курсив*")
+    st.latex(r"\sum_{i=1}^n x_i^2")
+    st.code("print('Hello World!')", language='python')
+    st.title("Главный заголовок")
+    st.header("Заголовок раздела")
+    st.subheader("Подзаголовок")
+    st.markdown("---")
+
+# Таблицы
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("2. Таблицы")
+    st.code('''
+# Статическая таблица
+st.table(data)
+
+# Интерактивная таблица
+st.dataframe(
+    data,
+    height=300,              # Высота области
+    use_container_width=True,# На всю ширину
+    hide_index=True,         # Скрыть индексы
+    column_order=["Город", "Рейтинг"] # Порядок колонок
+)
+
+# Метрики
+st.metric(
+    label="Температура",    # Название
+    value="+23°C",          # Значение
+    delta="+2°C",           # Изменение
+    delta_color="normal"    # Цвет: normal/off/inverse
+)
+''', language='python')
+
+with col2:
+    st.subheader("Пример")
+    
+    st.markdown("**Статическая таблица**")
+    st.table(data.head(2))
+    
+    st.markdown("**Интерактивная таблица**")
+    st.dataframe(
+        data,
+        height=150,
+        use_container_width=True,
+        hide_index=True,
+        column_order=["Город", "Население (млн)"]
+    )
+    
+    st.markdown("**Метрики**")
+    col_metric1, col_metric2 = st.columns(2)
+    with col_metric1:
+        st.metric("Влажность", "65%", "-3%")
+    with col_metric2:
+        st.metric("Продажи", "$12,500", "+15%", delta_color="off")
+    st.markdown("---")
+
+# Графики
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("3. Графики")
+    st.code('''
+# Линейный график
+st.line_chart(data.set_index('Город')['Рейтинг'])
+
+# Столбчатая диаграмма
+st.bar_chart(data.set_index('Город')['Население (млн)'])
+
+# Area chart
+st.area_chart(data.set_index('Город'))
+
+# Plotly график
+fig = px.scatter(
+    data,
+    x='Население (млн)',
+    y='Рейтинг',
+    size='Население (млн)',
+    color='Город',
+    title="Соотношение населения и рейтинга"
+)
+st.plotly_chart(fig)
+''', language='python')
+
+with col2:
+    st.subheader("Пример")
+    
+    st.markdown("**Линейный график**")
+    st.line_chart(data.set_index('Город')['Рейтинг'])
+    
+    st.markdown("**Столбчатая диаграмма**")
+    st.bar_chart(data.set_index('Город')['Население (млн)'])
+    
+    st.markdown("**Area chart**")
+    st.area_chart(data.set_index('Город'))
+    
+    st.markdown("**Plotly график**")
+    fig = px.scatter(
+        data,
+        x='Население (млн)',
+        y='Рейтинг',
+        size='Население (млн)',
+        color='Город',
+        title="Соотношение населения и рейтинга"
+    )
+    st.plotly_chart(fig)
+    st.markdown("---")
+
+# JSON
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("4. JSON")
+    st.code('''
+st.json({
+    "система": "Streamlit Demo",
+    "версия": 2.1,
+    "статус": "активный",
+    "настройки": {
+        "тема": "темная",
+        "язык": "русский"
+    }
+})
+''', language='python')
+
+with col2:
+    st.subheader("Пример")
+    st.json({
+        "система": "Streamlit Demo",
+        "версия": 2.1,
+        "статус": "активный",
+        "настройки": {
+            "тема": "темная",
+            "язык": "русский"
+        }
+    })
     st.markdown("---")
