@@ -1,58 +1,66 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-from numba import jit
 
-st.title('Фрактальный генератор Мандельброта 🌀')
-st.markdown("### Параметры фрактала")
+st.title('Визуализация суперформулы')
+st.markdown("### Изменяйте параметры для создания различных форм")
 
 # Отображение исходного кода
-with st.expander("Показать исходный код программы"):
+with st.expander("Показать исходный код"):
     with open(__file__, 'r') as f:
-        code = f.read()
-    st.code(code, language='python')
+        st.code(f.read(), language='python')
 
-# Параметры ввода в сайдбаре
-with st.sidebar:
-    st.header("Настройки генерации")
-    width = st.slider("Ширина изображения", 100, 1000, 600)
-    height = st.slider("Высота изображения", 100, 1000, 400)
-    max_iter = st.slider("Макс. итераций", 20, 500, 100)
-    zoom = st.slider("Масштаб", 0.1, 4.0, 1.0)
+# Параметры управления
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    m = st.slider('Количество лепестков (m)', 1, 20, 5)
+with col2:
+    n1 = st.slider('Форма 1 (n1)', 0.1, 10.0, 2.0)
+with col3:
+    n2 = st.slider('Форма 2 (n2)', 0.1, 10.0, 2.0)
+with col4:
+    n3 = st.slider('Форма 3 (n3)', 0.1, 10.0, 2.0)
 
-# Функция для расчета множества Мандельброта (ускоренная с помощью Numba)
-@jit(nopython=True)
-def mandelbrot(c, max_iter):
-    z = 0
-    for n in range(max_iter):
-        if abs(z) > 2:
-            return n
-        z = z*z + c
-    return 0
+# Блок с формулой
+st.markdown(r"""
+**Математическая формула:**
+$$
+r(\phi) = \left( \left| \frac{1}{a} \cos\left( \frac{m\phi}{4} \right) \right|^{n_2} + 
+           \left| \frac{1}{b} \sin\left( \frac{m\phi}{4} \right) \right|^{n_3} \right)^{-1/n_1}
+$$
+*где a = b = 1.0 в данной реализации*
+""")
 
-# Генерация фрактала
-def generate_fractal(width, height, zoom, max_iter):
-    x = np.linspace(-2.0/zoom, 0.5/zoom, width)
-    y = np.linspace(-1.1/zoom, 1.1/zoom, height)
-    fractal = np.zeros((height, width))
+# Функция суперформулы
+def superformula(phi, m, n1, n2, n3):
+    a = 1.0
+    b = 1.0
+    t1 = np.abs((1/a) * np.cos(m * phi / 4))
+    t2 = np.abs((1/b) * np.sin(m * phi / 4))
+    return (t1**n2 + t2**n3)**(-1/n1)
 
-    for i in range(height):
-        for j in range(width):
-            fractal[i,j] = mandelbrot(x[j] + 1j*y[i], max_iter)
-    
-    return fractal
+# Генерация и отрисовка графика
+theta = np.linspace(-np.pi, np.pi, 1000)
+r = superformula(theta, m, n1, n2, n3)
 
-# Основная логика приложения
-if st.button('Сгенерировать фрактал'):
-    with st.spinner('Генерация фрактала...'):
-        fractal = generate_fractal(width, height, zoom, max_iter)
-        
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.imshow(fractal.T, cmap='hot', interpolation='bilinear')
-        ax.axis('off')
-        plt.tight_layout()
-        
-        st.pyplot(fig)
-        st.success('Фрактал успешно сгенерирован!')
-        st.markdown("**Интересный факт:** Каждая точка фрактала представляет собой комплексное число, "
-                    "а цвет показывает скорость расходимости итерационной последовательности.")
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(111, projection='polar')
+ax.plot(theta, r, color='purple', lw=2)
+ax.set_rmax(2)
+ax.grid(True)
+ax.set_title("Визуализация суперформулы", va='bottom')
+
+st.pyplot(fig)
+
+# Пояснение параметров
+st.markdown("""
+**Как работают параметры:**
+- `m` - определяет количество лепестков/выступов
+- `n1` - контролирует общий размер формы
+- `n2` и `n3` - влияют на форму лепестков и впадин
+
+**Примеры настроек:**
+- Квадрат: `m=4, n1=2, n2=7, n3=7`
+- Цветок: `m=5, n1=2, n2=3, n3=3`
+- Звезда: `m=5, n1=0.5, n2=0.5, n3=0.5`
+""")
