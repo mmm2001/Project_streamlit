@@ -3,6 +3,8 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import plotly.express as px
+from io import BytesIO
+import time
 
 st.title("Элементы ввода Streamlit")
 st.markdown("---")
@@ -435,3 +437,98 @@ with col2:
         }
     })
     st.markdown("---")
+
+    st.title("Медиа элементы Streamlit")
+st.markdown("---")
+
+# Изображение
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("1. Изображение (Image)")
+    st.code('''
+st.image(
+    image="https://example.com/image.jpg",  # URL или путь к файлу
+    caption="Описание изображения",        # Подпись
+    width=400,                             # Ширина в пикселях
+    use_column_width=False,                # Растянуть на всю колонку
+    clamp=False,                           # Ограничить цветовой диапазон
+    channels="RGB",                        # Цветовые каналы (RGB/BGR)
+    output_format="auto"                   # Формат (JPEG/PNG)
+)
+''', language='python')
+
+with col2:
+    st.subheader("Пример")
+    
+    # Пример с URL
+    st.image(
+        "https://streamlit.io/images/brand/streamlit-logo-secondary-colormark-darktext.png",
+        caption="Логотип Streamlit",
+        width=300
+    )
+    
+    # Пример с локальным файлом (для демонстрации)
+    st.image(
+        "XPpic.jpg",
+        caption="XPpic.jpg",
+        use_column_width=True
+    )
+    st.markdown("---")
+
+# Аудио
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("2. Аудио (Audio)")
+    st.code('''
+st.audio(
+    data="audio.mp3",          # Путь к файлу, URL или bytes
+    format="audio/mp3",        # Формат (автоопределение)
+    start_time=0               # Начало воспроизведения в секундах
+)
+''', language='python')
+
+with col2:
+    st.subheader("Пример")
+    st.audio(
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        format="audio/mp3",
+        start_time=10
+    )
+    st.write("Пример аудиофайла (начало с 10 секунды)")
+    st.markdown("---")
+
+# Видео
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("3. Видео (Video)")
+    st.code('''
+st.video(
+    data="video.mp4",          # Путь к файлу, URL или bytes
+    format="video/mp4",        # Формат (автоопределение)
+    start_time=0               # Начало воспроизведения в секундах
+)
+''', language='python')
+
+with col2:
+    st.subheader("Пример")
+    st.video(
+        "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4",
+        format="video/mp4",
+        start_time=5
+    )
+    st.write("Пример видео (начало с 5 секунды)")
+    st.markdown("---")
+
+# Дополнительная информация
+st.markdown("### Поддерживаемые форматы:")
+st.markdown("""
+- **Изображения:** PNG, JPG/JPEG, GIF, BMP, WEBP
+- **Аудио:** WAV, MP3, OGG, FLAC
+- **Видео:** MP4, WEBM, OGG
+
+**Советы:**
+1. Для больших файлов используйте прогресс-бар загрузки
+2. Локальные файлы можно загружать через `st.file_uploader`
+3. Для YouTube видео используйте специальные компоненты
+""")
+
