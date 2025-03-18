@@ -549,16 +549,16 @@ if menu == "Элементы прогресса и статуса":
         st.subheader("1. Прогресс-бар (Progress)")
         st.code('''
     # Создание прогресс-бара
-    progress_bar = st.progress(
-        value=0,        # Начальное значение (0-100)
-        text="Загрузка" # Текст над прогресс-баром
-    )
-
-    # Обновление значения
-    progress_bar.progress(
-        value=75,       # Новое значение (0-100)
-        text="75% завершено" # Обновлённый текст
-    )
+    if st.button("Запустить прогресс"):
+            progress = st.progress(0, text="Начало обработки...")
+            for i in range(100):
+                time.sleep(0.1)
+                progress.progress(i, text=f"Обработка: {i}%")
+            progress.empty()
+        
+        # Статичный пример
+        static_progress = st.progress(45)
+        static_progress.progress(45, "Постоянный прогресс (45%)")
     ''', language='python')
 
     with col2:
@@ -568,8 +568,8 @@ if menu == "Элементы прогресса и статуса":
         if st.button("Запустить прогресс"):
             progress = st.progress(0, text="Начало обработки...")
             for i in range(100):
-                time.sleep(0.02)
-                progress.progress(i + 1, text=f"Обработка: {i+1}%")
+                time.sleep(0.1)
+                progress.progress(i, text=f"Обработка: {i}%")
             progress.empty()
         
         # Статичный пример
