@@ -273,10 +273,6 @@ if menu == "Элементы ввода":
         st.write(f"Выбрано: {date} {time_}")
         st.markdown("---")
 
-#
-# ЭЛЕМЕНТЫ ВЫВОДА
-# 
-
 if menu == "Элементы вывода":
     st.title("Элементы вывода Streamlit")
     st.markdown("---")
@@ -449,7 +445,6 @@ if menu == "Элементы вывода":
             }
         })
         st.markdown("---")
-
 
 if menu == "Медиа элементы":    
     st.title("Медиа элементы Streamlit")
