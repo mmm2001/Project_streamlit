@@ -250,7 +250,6 @@ if menu == "Элементы ввода":
     # Время
     st.time_input(
         label="Выберите время",
-        value=datetime.now().time(), # Стартовое время
         key="time_input1"
     )
     ''', language='python')
@@ -267,7 +266,6 @@ if menu == "Элементы ввода":
         )
         time_ = st.time_input(
             label="Выберите время",
-            value=datetime.now().time(),
             key="time_input1"
         )
         st.write(f"Выбрано: {date} {time_}")
