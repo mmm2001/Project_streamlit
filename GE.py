@@ -463,14 +463,18 @@ if menu == "Медиа элементы":
     with col1:
         st.subheader("1. Изображение (Image)")
         st.code('''
+    # Пример с URL
     st.image(
-        image="https://example.com/image.jpg",  # URL или путь к файлу
-        caption="Описание изображения",        # Подпись
-        width=400,                             # Ширина в пикселях
-        use_column_width=False,                # Растянуть на всю колонку
-        clamp=False,                           # Ограничить цветовой диапазон
-        channels="RGB",                        # Цветовые каналы (RGB/BGR)
-        output_format="auto"                   # Формат (JPEG/PNG)
+        "https://streamlit.io/images/brand/streamlit-logo-secondary-colormark-darktext.png",
+        caption="Логотип Streamlit",
+        width=300
+    )
+    
+    # Пример с локальным файлом (для демонстрации)
+    st.image(
+        "XPpic.jpg",
+        caption="XPpic.jpg",
+        use_container_width=True
     )
     ''', language='python')
 
@@ -498,9 +502,11 @@ if menu == "Медиа элементы":
         st.subheader("2. Аудио (Audio)")
         st.code('''
     st.audio(
-        data="audio.mp3",          # Путь к файлу, URL или bytes
-        format="audio/mp3",        # Формат (автоопределение)
-        start_time=0               # Начало воспроизведения в секундах
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        format="audio/mp3",
+        start_time=10
+    )
+    st.write("Пример аудиофайла (начало с 10 секунды)")    start_time=0               # Начало воспроизведения в секундах
     )
     ''', language='python')
 
@@ -520,10 +526,11 @@ if menu == "Медиа элементы":
         st.subheader("3. Видео (Video)")
         st.code('''
     st.video(
-        data="video.mp4",          # Путь к файлу, URL или bytes
-        format="video/mp4",        # Формат (автоопределение)
-        start_time=0               # Начало воспроизведения в секундах
+        "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4",
+        format="video/mp4",
+        start_time=5
     )
+    st.write("Пример видео (начало с 5 секунды)")
     ''', language='python')
 
     with col2:
@@ -560,15 +567,14 @@ if menu == "Элементы прогресса и статуса":
         st.code('''
     # Создание прогресс-бара
     if st.button("Запустить прогресс"):
-            progress = st.progress(0, text="Начало обработки...")
-            for i in range(100):
-                time.sleep(0.1)
-                progress.progress(i, text=f"Обработка: {i}%")
-            progress.empty()
-        
-        # Статичный пример
-        static_progress = st.progress(45)
-        static_progress.progress(45, "Постоянный прогресс (45%)")
+        progress_text = "Operation in progress. Please wait."
+        my_bar = st.progress(0, text=progress_text)
+
+        for percent_complete in range(100):
+            time.sleep(0.01)
+            my_bar.progress(percent_complete + 1, text=progress_text)
+        time.sleep(1)
+        my_bar.empty()
     ''', language='python')
 
     with col2:
@@ -592,13 +598,10 @@ if menu == "Элементы прогресса и статуса":
     with col1:
         st.subheader("2. Спиннер (Spinner)")
         st.code('''
-    with st.spinner(
-        text="Идёт загрузка..."  # Текст спиннера
-    ):
-        # Долгая операция
-        time.sleep(2)
-        
-    st.success("Готово!")  # Сообщение после завершения
+if st.button("Запустить обработку"):
+    with st.spinner("Подождите 3 секунды...", show_time=True):
+        time.sleep(3)
+    st.success("Операция успешно завершена!")
     ''', language='python')
 
     with col2:
@@ -614,35 +617,18 @@ if menu == "Элементы прогресса и статуса":
     with col1:
         st.subheader("3. Сообщения (Messages)")
         st.code('''
-    # Успех
-    st.success(
-        "Успешное выполнение!", 
-        icon="✅"  # Можно менять иконку
-    )
-
-    # Ошибка
-    st.error(
-        "Произошла ошибка",
-        icon="🚨"
-    )
-
-    # Предупреждение
-    st.warning(
-        "Внимание! Это важно",
-        icon="⚠️"
-    )
-
-    # Информационное
-    st.info(
-        "Полезная информация",
-        icon="ℹ️"
-    )
-
-    # Исключение
+if st.button("Показать сообщения"):
+    st.success("Данные сохранены успешно!", icon="💾")
+    st.error("Ошибка подключения к базе", icon="🔌")
+    st.warning("Недостаточно памяти", icon="💽")
+    st.info("Обновление доступно", icon="🔄")
+    
+if st.button("Показать исключение"):
     try:
-        1 / 0
+        # Генерируем ошибку
+        raise ValueError("Пример кастомной ошибки")
     except Exception as e:
-        st.exception(e)  # Показывает трейсбэк
+        st.exception(e)
     ''', language='python')
 
     with col2:
