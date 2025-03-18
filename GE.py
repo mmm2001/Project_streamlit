@@ -26,13 +26,13 @@ if menu == "Элементы ввода":
     with col1:
         st.subheader("1. Кнопка (Button)")
         st.code('''
-    st.button(
-        label="Нажми меня",  # Текст на кнопке
-        key="my_button",     # Уникальный идентификатор
-        help="Подсказка",    # Текст при наведении
-        disabled=False       # Блокировка кнопки
-    )
-    ''', language='python')
+clicked = st.button(
+    label="Нажми меня",
+    key="btn1",
+    help="Это пример кнопки",
+    disabled=False
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -50,15 +50,15 @@ if menu == "Элементы ввода":
     with col1:
         st.subheader("2. Текстовый ввод (Text Input)")
         st.code('''
-    st.text_input(
-        label="Введите текст",    # Заголовок
-        value="По умолчанию",     # Стартовое значение
-        max_chars=50,            # Макс. символов
-        placeholder="Введите...",# Подсказка
-        help="Подсказка",        # Всплывающая помощь
-        key="text_input1"        # Уникальный ключ
-    )
-    ''', language='python')
+text = st.text_input(
+    label="Введите текст",
+    value="Привет!",
+    max_chars=50,
+    placeholder="Введите что-нибудь...",
+    help="Это текстовое поле",
+    key="text_input1"
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -78,16 +78,16 @@ if menu == "Элементы ввода":
     with col1:
         st.subheader("3. Слайдер (Slider)")
         st.code('''
-    st.slider(
-        label="Выберите значение",  # Заголовок
-        min_value=0,               # Минимальное значение
-        max_value=100,             # Максимальное значение
-        value=50,                  # Стартовое значение
-        step=5,                    # Шаг изменения
-        format="%d%%",             # Формат отображения
-        key="slider1"              # Уникальный ключ
-    )
-    ''', language='python')
+slider_val = st.slider(
+    label="Выберите значение",
+    min_value=0,
+    max_value=100,
+    value=50,
+    step=5,
+    format="%d%%",
+    key="slider1"
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -108,15 +108,15 @@ if menu == "Элементы ввода":
     with col1:
         st.subheader("4. Selectbox")
         st.code('''
-    st.selectbox(
-        label="Выберите вариант",  # Заголовок
-        options=["A", "B", "C"],  # Список вариантов
-        index=0,                   # Стартовый индекс
-        format_func=lambda x: x*2,# Форматирование
-        help="Подсказка",          # Всплывающая помощь
-        key="selectbox1"           # Уникальный ключ
-    )
-    ''', language='python')
+option = st.selectbox(
+    label="Выберите вариант",
+    options=["Python", "JavaScript", "Java", "C++"],
+    index=0,
+    format_func=lambda x: x.upper(),
+    help="Выберите язык программирования",
+    key="selectbox1"
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -136,14 +136,14 @@ if menu == "Элементы ввода":
     with col1:
         st.subheader("5. Multiselect")
         st.code('''
-    st.multiselect(
-        label="Выберите варианты",  # Заголовок
-        options=["A", "B", "C"],    # Список вариантов
-        default=["A"],              # Выбрано по умолчанию
-        help="Подсказка",           # Всплывающая помощь
-        key="multiselect1"          # Уникальный ключ
-    )
-    ''', language='python')
+selected = st.multiselect(
+    label="Выберите технологии",
+    options=["Python", "SQL", "Docker", "AWS", "PyTorch"],
+    default=["Python"],
+    help="Выберите нужные технологии",
+    key="multiselect1"
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -162,13 +162,22 @@ if menu == "Элементы ввода":
     with col1:
         st.subheader("6. Checkbox")
         st.code('''
-    st.checkbox(
-        label="Согласен с условиями",  # Текст чекбокса
-        value=False,                   # Стартовое состояние
-        help="Подсказка",             # Всплывающая помощь
-        key="checkbox1"               # Уникальный ключ
-    )
-    ''', language='python')
+checked = st.checkbox(
+    label="Принять лицензионное соглашение",
+    value=False,
+    help="Необходимо для продолжения",
+    key="checkbox1"
+                
+
+option = st.radio(
+    "Выбрать опцию",
+    ["Опция 1", "Опция 2", "Опция 3"],
+    index=None,
+)
+
+st.write("Вы выбрали:", option)
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -179,21 +188,30 @@ if menu == "Элементы ввода":
             key="checkbox1"
         )
         st.write(f"Состояние чекбокса: {checked}")
+
+        option = st.radio(
+            "Выбрать опцию",
+            ["Опция 1", "Опция 2", "Опция 3"],
+            index=None,
+        )
+        st.write("Вы выбрали:", option)
+
         st.markdown("---")
+
 
     # Загрузка файла
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("7. File Uploader")
         st.code('''
-    st.file_uploader(
-        label="Загрузите файл",    # Заголовок
-        type=["jpg", "png", "pdf"],# Разрешённые типы
-        accept_multiple_files=True,# Множественная загрузка
-        help="Подсказка",          # Всплывающая помощь
-        key="file_uploader1"       # Уникальный ключ
-    )
-    ''', language='python')
+uploaded_file = st.file_uploader(
+    label="Загрузите документ",
+    type=["txt", "pdf", "docx"],
+    accept_multiple_files=False,
+    help="Максимальный размер файла: 200MB",
+    key="file_uploader1"
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -213,12 +231,12 @@ if menu == "Элементы ввода":
     with col1:
         st.subheader("8. Color Picker")
         st.code('''
-    st.color_picker(
-        label="Выберите цвет",  # Заголовок
-        value="#00FF00",        # Стартовый цвет
-        key="color_picker1"     # Уникальный ключ
-    )
-    ''', language='python')
+color = st.color_picker(
+    label="Выберите цвет фона",
+    value="#FF0000",
+    key="color_picker1"
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -228,8 +246,7 @@ if menu == "Элементы ввода":
             key="color_picker1"
         )
         st.write(f"Выбранный цвет: {color}")
-        st.markdown(f'<div style="height:50px; background:{color}"></div>', 
-                    unsafe_allow_html=True)
+        st.markdown(f'<div style="height:50px; background:{color}"></div>', unsafe_allow_html=True)
         st.markdown("---")
 
     # Дата и время
@@ -237,22 +254,20 @@ if menu == "Элементы ввода":
     with col1:
         st.subheader("9. Date/Time Input")
         st.code('''
-    # Дата
-    st.date_input(
-        label="Выберите дату",
-        value=datetime.now(),    # Стартовая дата
-        min_value=datetime(2000, 1, 1), # Минимальная дата
-        max_value=datetime(2030, 12, 31),# Максимальная дата
-        format="DD.MM.YYYY",     # Формат
-        key="date_input1"
-    )
+date = st.date_input(
+    label="Выберите дату",
+    value=datetime.now(),
+    min_value=datetime(2000, 1, 1),
+    max_value=datetime(2030, 12, 31),
+    format="DD.MM.YYYY",
+    key="date_input1"
+)
 
-    # Время
-    st.time_input(
-        label="Выберите время",
-        key="time_input1"
-    )
-    ''', language='python')
+time_ = st.time_input(
+    label="Выберите время",
+    key="time_input1"
+)
+''', language='python')
 
     with col2:
         st.subheader("Пример")
@@ -287,22 +302,15 @@ if menu == "Элементы вывода":
     with col1:
         st.subheader("1. Текст")
         st.code('''
-    # Простой текст
+    st.subheader("Пример")
     st.text("Обычный текст без форматирования")
-
-    # Markdown
     st.markdown("**Жирный текст** и *курсив*")
-
-    # LaTeX
     st.latex(r"\sum_{i=1}^n x_i^2")
-
-    # Код
     st.code("print('Hello World!')", language='python')
-
-    # Заголовки
     st.title("Главный заголовок")
     st.header("Заголовок раздела")
     st.subheader("Подзаголовок")
+    st.markdown("---")
     ''', language='python')
 
     with col2:
@@ -321,25 +329,27 @@ if menu == "Элементы вывода":
     with col1:
         st.subheader("2. Таблицы")
         st.code('''
-    # Статическая таблица
-    st.table(data)
+st.subheader("Пример")
+    
+st.markdown("**Статическая таблица**")
+st.table(data.head(2))
 
-    # Интерактивная таблица
-    st.dataframe(
-        data,
-        height=300,              # Высота области
-        use_container_width=True,# На всю ширину
-        hide_index=True,         # Скрыть индексы
-        column_order=["Город", "Рейтинг"] # Порядок колонок
-    )
+st.markdown("**Интерактивная таблица**")
+st.dataframe(
+    data,
+    height=150,
+    use_container_width=True,
+    hide_index=True,
+    column_order=["Город", "Население (млн)"]
+)
 
-    # Метрики
-    st.metric(
-        label="Температура",    # Название
-        value="+23°C",          # Значение
-        delta="+2°C",           # Изменение
-        delta_color="normal"    # Цвет: normal/off/inverse
-    )
+st.markdown("**Метрики**")
+col_metric1, col_metric2 = st.columns(2)
+with col_metric1:
+    st.metric("Влажность", "65%", "-3%")
+with col_metric2:
+    st.metric("Продажи", "$12,500", "+15%", delta_color="off")
+)
     ''', language='python')
 
     with col2:
@@ -370,16 +380,16 @@ if menu == "Элементы вывода":
     with col1:
         st.subheader("3. Графики")
         st.code('''
-    # Линейный график
+    st.markdown("**Линейный график**")
     st.line_chart(data.set_index('Город')['Рейтинг'])
-
-    # Столбчатая диаграмма
+    
+    st.markdown("**Столбчатая диаграмма**")
     st.bar_chart(data.set_index('Город')['Население (млн)'])
-
-    # Area chart
+    
+    st.markdown("**Area chart**")
     st.area_chart(data.set_index('Город'))
-
-    # Plotly график
+    
+    st.markdown("**Plotly график**")
     fig = px.scatter(
         data,
         x='Население (млн)',
@@ -566,15 +576,15 @@ if menu == "Элементы прогресса и статуса":
         
         # Пример с анимацией
         if st.button("Запустить прогресс"):
-            progress = st.progress(0, text="Начало обработки...")
-            for i in range(100):
-                time.sleep(0.1)
-                progress.progress(i, text=f"Обработка: {i}%")
-            progress.empty()
-        
-        # Статичный пример
-        static_progress = st.progress(45)
-        static_progress.progress(45, "Постоянный прогресс (45%)")
+            progress_text = "Operation in progress. Please wait."
+            my_bar = st.progress(0, text=progress_text)
+
+            for percent_complete in range(100):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
+            time.sleep(1)
+            my_bar.empty()
+
         st.markdown("---")
 
     # Спиннер
@@ -594,7 +604,7 @@ if menu == "Элементы прогресса и статуса":
     with col2:
         st.subheader("Пример")
         if st.button("Запустить обработку"):
-            with st.spinner("Подождите 3 секунды..."):
+            with st.spinner("Подождите 3 секунды...", show_time=True):
                 time.sleep(3)
             st.success("Операция успешно завершена!")
         st.markdown("---")
