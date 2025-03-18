@@ -31,7 +31,7 @@
    git clone https://github.com/USERNAME/REPOSITORYNAME.git
 ```
 
-   Замените `USERNAME` и `REPOSITORYNAME на актуальные данные вашего репозитория.
+   Замените `USERNAME` и `REPOSITORYNAME` на актуальные данные вашего репозитория.
 
 5. Перейдите в директорию клонированного репозитория:
 
