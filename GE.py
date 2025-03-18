@@ -669,21 +669,21 @@ if menu == "Макеты":
     with col1:
         st.subheader("1. Столбцы (Columns)")
         st.code('''
-    # Создание колонок
-    col1, col2, col3 = st.columns(
-        spec=3,                  # Количество колонок (или список весов)
-        gap="medium",            # Расстояние между колонками: "small", "medium", "large"
-        # vertical_align="center" # Выравнивание (только с custom CSS)
-    )
+# Создание колонок
+demo_col1, demo_col2, demo_col3 = st.columns(3, gap="small")
+with demo_col1:
+    st.button("Пример 1")
+with demo_col2:
+    st.button("Пример 2")
+with demo_col3:
+    st.button("Пример 3")
 
-    # Использование контекстного менеджера
-    with col1:
-        st.button("Кнопка в 1 колонке")
-        
-    col2.write("Текст во 2 колонке")
-
-    # Пример с разными ширинами
-    wide_col, narrow_col = st.columns([3, 1])
+# Колонки с разной шириной
+wide_col, narrow_col = st.columns([3, 1])
+with wide_col:
+    st.write("Широкая колонка")
+with narrow_col:
+    st.metric("Метрика", "42")
     ''', language='python')
 
     with col2:
@@ -712,15 +712,18 @@ if menu == "Макеты":
     with col1:
         st.subheader("2. Вкладки (Tabs)")
         st.code('''
-    tab1, tab2 = st.tabs(
-        ["Первая вкладка", "Вторая вкладка"], # Названия вкладок
-        # gap="small"                        # Расстояние между вкладками
-    )
+tab1, tab2, tab3 = st.tabs(["📊 График", "📝 Текст", "⚙️ Настройки"])
+        
+with tab1:
+    st.line_chart([1, 3, 2, 4])
+    st.caption("Пример графика")
 
-    with tab1:
-        st.write("Контент первой вкладки")
+with tab2:
+    st.write("Пример текстового контента")
+    st.code("print('Hello World!')")
 
-    tab2.markdown("**Маркдаун** во второй вкладке")
+with tab3:
+    st.slider("Пример настройки", 0, 100)
     ''', language='python')
 
     with col2:
@@ -746,13 +749,14 @@ if menu == "Макеты":
     with col1:
         st.subheader("3. Сайдбар (Sidebar)")
         st.code('''
-    # Вариант 1: Контекстный менеджер
-    with st.sidebar:
-        st.header("Меню")
-        selected = st.selectbox("Выберите", ["Главная", "О нас"])
-        
-    # Вариант 2: Прямой доступ
-    st.sidebar.button("Специальная кнопка")
+with st.expander("Показать пример сайдбара", expanded=True):
+        with st.sidebar.container():  # Временный контейнер для демонстрации
+            st.header("Пример меню")
+            page = st.selectbox("Навигация", ["Главная", "Настройки", "Помощь"])
+            st.slider("Яркость", 0, 100, 50)
+            if st.button("Обновить"):
+            st.toast("Настройки сохранены!")
+
     ''', language='python')
 
     with col2:
@@ -783,6 +787,25 @@ if menu == "Макеты":
     st.markdown("---")
     st.subheader("Комбинированный пример")
 
+    st.code('''
+main_col, side_col = st.columns([4, 1])
+    with main_col:
+        analytics_tab, logs_tab = st.tabs(["Аналитика", "Логи"])
+        
+        with analytics_tab:
+            st.scatter_chart([(x, x**2) for x in range(10)])
+        
+        with logs_tab:
+            st.json({"event": "click", "time": "12:34:56"})
+
+    with side_col:
+        with st.container(border=True):
+            st.metric("Пользователи", "1423", "+5.2%")
+            st.progress(75)
+
+
+    ''', language='python')
+
     main_col, side_col = st.columns([4, 1])
     with main_col:
         analytics_tab, logs_tab = st.tabs(["Аналитика", "Логи"])
@@ -807,20 +830,25 @@ if menu == "Прочие элементы":
     with col1:
         st.subheader("1. Форма (Form)")
         st.code('''
-    with st.form(
-        key="my_form",              # Уникальный идентификатор
-        border=True,                # Граница формы
-        clear_on_submit=False       # Очищать поля после отправки
-    ):
-        # Элементы внутри формы
-        name = st.text_input("Имя")
-        email = st.text_input("Email")
+    with st.form(key="example_form", border=True):
+        st.write("**Регистрация**")
         
-        # Кнопка отправки
-        submitted = st.form_submit_button("Отправить")
+        form_name = st.text_input("Ваше имя:")
+        form_email = st.text_input("Ваш email:")
+        form_newsletter = st.checkbox("Подписаться на рассылку")
         
-    if submitted:
-        st.write(f"Данные: {name}, {email}")
+        submitted = st.form_submit_button("Зарегистрироваться")
+        
+        if submitted:
+            if form_name and form_email:
+                st.success("Регистрация успешна!")
+                st.write(f"""
+                - Имя: {form_name}
+                - Email: {form_email}
+                - Рассылка: {'Да' if form_newsletter else 'Нет'}
+                """)
+            else:
+                st.error("Заполните обязательные поля!")
     ''', language='python')
 
     with col2:
@@ -853,17 +881,17 @@ if menu == "Прочие элементы":
         st.subheader("2. Экспериментальные элементы")
         st.code('''
     # Анимация шариков
-    st.balloons(
-        # Не имеет параметров
-    )
-
-    # Анимация снегопада
-    st.snow(
-        # Не имеет параметров
-    )
-
-    # Toast-уведомление (v1.29+)
-    st.toast("Успешно сохранено!", icon="🎉")
+    col_anim1, col_anim2 = st.columns(2)
+    with col_anim1:
+        if st.button("🎈 Запустить шарики"):
+            st.balloons()
+            
+    with col_anim2:
+        if st.button("❄️ Включить снег"):
+            st.snow()
+    
+    if st.button("Показать уведомление"):
+        st.toast("Данные обновлены!", icon="✅")
     ''', language='python')
 
     with col2:
@@ -904,6 +932,25 @@ if menu == "Прочие элементы":
     # Пример сложной формы
     st.markdown("---")
     st.subheader("Пример расширенной формы")
+
+    st.code('''
+    # Анимация шариков
+    with st.form("advanced_form"):
+        cols = st.columns(3)
+        with cols[0]:
+            age = st.slider("Возраст", 18, 99)
+        with cols[1]:
+            color = st.color_picker("Любимый цвет")
+        with cols[2]:
+            lang = st.selectbox("Язык", ["Python", "JavaScript", "Java"])
+        
+        bio = st.text_area("О себе", max_chars=200)
+        resume = st.file_uploader("Резюме (PDF)", type=["pdf"])
+        
+        if st.form_submit_button("Сохранить профиль"):
+            st.toast("Профиль обновлён!", icon="💾")
+            st.rerun()
+    ''', language='python')
 
     with st.form("advanced_form"):
         cols = st.columns(3)
