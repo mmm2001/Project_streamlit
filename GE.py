@@ -955,7 +955,7 @@ if menu == "Прочие элементы":
     with st.form("advanced_form"):
         cols = st.columns(3)
         with cols[0]:
-            age = st.slider("Возраст", 18, 99)
+            age = st.slider("Возраст", 0, 99)
         with cols[1]:
             color = st.color_picker("Любимый цвет")
         with cols[2]:
