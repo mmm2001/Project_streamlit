@@ -6,6 +6,7 @@ import plotly.express as px
 from io import BytesIO
 import time 
 from bokeh.plotting import figure
+import matplotlib.pyplot as plt
 
 menu = st.sidebar.radio('***',
     (
@@ -521,6 +522,7 @@ with col_metric2:
 
     ''', language='python')
 
+    
     x = [1, 2, 3, 4, 5]
     y = [6, 7, 2, 4, 5]
 
@@ -530,6 +532,48 @@ with col_metric2:
     st.bokeh_chart(p)
 
     st.markdown("---")
+
+
+    st.subheader("Радиальный график в pyplot")
+    st.code('''
+    def superformula(phi, m, n1, n2, n3):
+        a = 1.0
+        b = 1.0
+        t1 = np.abs((1/a) * np.cos(m * phi / 4))
+        t2 = np.abs((1/b) * np.sin(m * phi / 4))
+        return (t1**n2 + t2**n3)**(-1/n1)
+
+    theta = np.linspace(-np.pi, np.pi, 1000)
+    r = superformula(theta, 4, 5, 2, 3)
+
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection='polar')
+    ax.plot(theta, r, color='purple', lw=2)
+    ax.set_rmax(2)
+    ax.grid(True)
+    ax.set_title("Визуализация суперформулы", va='bottom')
+
+    st.pyplot(fig)
+    ''', language='python')
+
+    def superformula(phi, m, n1, n2, n3):
+        a = 1.0
+        b = 1.0
+        t1 = np.abs((1/a) * np.cos(m * phi / 4))
+        t2 = np.abs((1/b) * np.sin(m * phi / 4))
+        return (t1**n2 + t2**n3)**(-1/n1)
+
+    theta = np.linspace(-np.pi, np.pi, 1000)
+    r = superformula(theta, 4, 5, 7, 7)
+
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection='polar')
+    ax.plot(theta, r, color='purple', lw=2)
+    ax.set_rmax(2)
+    ax.grid(True)
+    ax.set_title("Визуализация суперформулы", va='bottom')
+
+    st.pyplot(fig)
 
     # JSON
     col1, col2 = st.columns(2)
