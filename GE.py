@@ -5,6 +5,7 @@ import numpy as np
 import plotly.express as px
 from io import BytesIO
 import time 
+from bokeh.plotting import figure
 
 menu = st.sidebar.radio('***',
     (
@@ -177,6 +178,11 @@ option = st.radio(
 
 st.write("Вы выбрали:", option)
 )
+                
+on = st.toggle("Включить функцию")
+
+if on:
+    st.write("Функция включена")
 ''', language='python')
 
     with col2:
@@ -189,6 +195,14 @@ st.write("Вы выбрали:", option)
         )
         st.write(f"Состояние чекбокса: {checked}")
 
+        checked = st.checkbox(
+            label="Я прочитал лицензионное соглашение",
+            value=False,
+            help="Необязательно для продолжения",
+            key="checkbox2"
+        )
+        st.write(f"Состояние чекбокса: {checked}")
+
         option = st.radio(
             "Выбрать опцию",
             ["Опция 1", "Опция 2", "Опция 3"],
@@ -196,8 +210,12 @@ st.write("Вы выбрали:", option)
         )
         st.write("Вы выбрали:", option)
 
-        st.markdown("---")
+        on = st.toggle("Включить функцию")
 
+        if on:
+            st.write("Функция включена")
+        
+        st.markdown("---")
 
     # Загрузка файла
     col1, col2 = st.columns(2)
@@ -292,9 +310,17 @@ if menu == "Элементы вывода":
 
     # Генерация тестовых данных
     data = pd.DataFrame({
-        'Город': ['Москва', 'Санкт-Петербург', 'Казань', 'Екатеринбург'],
-        'Население (млн)': [12.6, 5.4, 1.3, 1.5],
-        'Рейтинг': [4.7, 4.5, 4.3, 4.2]
+        'Город': ['Москва', 'Санкт-Петербург', 'Казань', 'Екатеринбург',
+                'Новосибирск', 'Нижний Новгород', 'Челябинск', 'Киров',
+                'Омск', 'Ростов-на-Дону', 'Уфа', 'Красноярск'],
+        
+        'Население (млн)': [12.6, 5.4, 1.3, 1.5,
+                        1.6, 1.2, 1.1, 1.1,
+                        1.0, 1.1, 1.1, 1.0],
+        
+        'Рейтинг': [4.7, 4.5, 4.3, 4.2,
+                4.4, 4.3, 4.1, 4.0,
+                4.1, 4.2, 4.3, 4.4]
     })
 
     # Текстовые элементы
@@ -302,7 +328,6 @@ if menu == "Элементы вывода":
     with col1:
         st.subheader("1. Текст")
         st.code('''
-    st.subheader("Пример")
     st.text("Обычный текст без форматирования")
     st.markdown("**Жирный текст** и *курсив*")
     st.latex(r"\sum_{i=1}^n x_i^2")
@@ -328,9 +353,22 @@ if menu == "Элементы вывода":
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("2. Таблицы")
-        st.code('''
-st.subheader("Пример")
+        st.code(''' 
+# Генерация тестовых данных
+data = pd.DataFrame({
+    'Город': ['Москва', 'Санкт-Петербург', 'Казань', 'Екатеринбург',
+            'Новосибирск', 'Нижний Новгород', 'Челябинск', 'Киров',
+            'Омск', 'Ростов-на-Дону', 'Уфа', 'Красноярск'],
     
+    'Население (млн)': [12.6, 5.4, 1.3, 1.5,
+                    1.6, 1.2, 1.1, 1.1,
+                    1.0, 1.1, 1.1, 1.0],
+    
+    'Рейтинг': [4.7, 4.5, 4.3, 4.2,
+            4.4, 4.3, 4.1, 4.0,
+            4.1, 4.2, 4.3, 4.4]
+})
+
 st.markdown("**Статическая таблица**")
 st.table(data.head(2))
 
@@ -404,16 +442,16 @@ with col_metric2:
     with col2:
         st.subheader("Пример")
         
-        st.markdown("**Линейный график**")
+        st.markdown("**Line chart**")
         st.line_chart(data.set_index('Город')['Рейтинг'])
         
-        st.markdown("**Столбчатая диаграмма**")
+        st.markdown("**Bar chart**")
         st.bar_chart(data.set_index('Город')['Население (млн)'])
         
         st.markdown("**Area chart**")
         st.area_chart(data.set_index('Город'))
         
-        st.markdown("**Plotly график**")
+        st.markdown("**Plotly chart**")
         fig = px.scatter(
             data,
             x='Население (млн)',
@@ -423,7 +461,75 @@ with col_metric2:
             title="Соотношение населения и рейтинга"
         )
         st.plotly_chart(fig)
-        st.markdown("---")
+
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Граф")
+        st.code('''
+        st.markdown("**graph**")
+        st.graphviz_chart(
+            digraph {` ` `
+                run -> intr
+                intr -> runbl
+                runbl -> run
+                run -> kernel
+                kernel -> zombie
+                kernel -> sleep
+                kernel -> runmem
+                sleep -> swap
+                swap -> runswap
+                runswap -> new
+                runswap -> runmem
+                new -> runmem
+                sleep -> runmem
+            }
+        ' ' ')
+    ''', language='python')
+
+    with col2:
+        st.subheader("Пример")
+
+        st.markdown("**graph**")
+        st.graphviz_chart('''
+            digraph {
+                run -> intr
+                intr -> runbl
+                runbl -> run
+                run -> kernel
+                kernel -> zombie
+                kernel -> sleep
+                kernel -> runmem
+                sleep -> swap
+                swap -> runswap
+                runswap -> new
+                runswap -> runmem
+                new -> runmem
+                sleep -> runmem
+            }
+        ''')
+
+    st.subheader("Классический график")
+    st.code('''
+    x = [1, 2, 3, 4, 5]
+    y = [6, 7, 2, 4, 5]
+
+    p = figure(title="simple line example", x_axis_label="x", y_axis_label="y")
+    p.line(x, y, legend_label="Trend", line_width=2)
+
+    st.bokeh_chart(p)
+
+    ''', language='python')
+
+    x = [1, 2, 3, 4, 5]
+    y = [6, 7, 2, 4, 5]
+
+    p = figure(title="simple line example", x_axis_label="x", y_axis_label="y")
+    p.line(x, y, legend_label="Trend", line_width=2)
+
+    st.bokeh_chart(p)
+
+    st.markdown("---")
 
     # JSON
     col1, col2 = st.columns(2)
